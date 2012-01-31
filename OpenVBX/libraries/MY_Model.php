@@ -388,7 +388,7 @@ class MY_Model extends Model
 
 	function save($force_update = false)
 	{
-		if(!($this instanceof VBX_Plugin_Store) AND intval($this->id) > 0)
+		if(is_numeric($this->id) AND intval($this->id) > 0)
 		{
 			$this->update($this->id, $this->values);
 			return true;
