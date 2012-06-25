@@ -3,6 +3,20 @@
     <h1>This applet is not supported in php version <?= PHP_VERSION ?></h1>
 </div>
 <?php else:
+//check for user provided holiday dates and parse 
+//TODO: would be nice to have an AppletUI for a datepicker
+$holiday = array();
+foreach(array('holiday_start', 'holiday_end') as $date){
+    $holiday[$date] = AppletInstance::getValue($date);
+    if($holiday[$date]){
+        try{
+            $holiday[$date] = date('g:ia M j, Y', strtotime($holiday[$date]));
+        } catch (Exception $e) {
+            error_log('could not parse holiday date: ' . $$holiday[$date]);
+        }
+    }
+}
+
 $days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
 							'Saturday', 'Sunday');
 $now = new DateTime('now');
@@ -44,5 +58,13 @@ $now = new DateTime('now');
 		<p>When someone calls or SMS while closed, use the applet below.</p>
 		<?php echo AppletUI::DropZone('closed', 'Closed'); ?>
 	</div>
+    <h3>Holiday applet.</h3>
+    <div class="vbx-full-pane">
+        <p>
+            Date: <input type='text' name='holiday_start' value='<?php echo $holiday['holiday_start']?>' /> to <input type='text' name='holiday_end' value='<?php echo $holiday['holiday_end']?>' /> 
+        </p>
+        <p>On this date, override with the applet below.</p>
+        <?php echo AppletUI::DropZone('holiday', 'Holiday'); ?>
+    </div>
 </div>
 <?php endif; ?>
