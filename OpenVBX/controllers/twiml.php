@@ -365,6 +365,18 @@ class Twiml extends MY_Controller {
 				$to = normalize_phone_to_E164($to);
 				$this->response->dial($to, $options);
 			}
+
+    		// Log outbound call
+    		$call = array(
+    		    'call_sid' => $this->input->get_post('CallSid'),
+    		    'user_id' => $this->session->userdata('user_id'),
+    		    'tenant_id' => $this->tenant->id,
+    		    'timestamp' => time()
+    		);
+    		
+    		// Using a full blown model seems a bit much for logging usage
+    		$ci =& get_instance();
+    		$ci->db->insert('user_calls', $call);			
 		} 
 		else 
 		{
