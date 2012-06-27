@@ -81,6 +81,7 @@ $system_folder = "system";
  |
 */
 $application_folder = dirname(__FILE__) . '/OpenVBX';
+date_default_timezone_set('America/Los_Angeles');
 
 /*
  |===============================================================
