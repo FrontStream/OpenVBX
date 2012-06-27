@@ -63,6 +63,33 @@ class Iframe extends User_Controller {
 		if (function_exists('twilio_dev_mods')) {
 			$data = twilio_dev_mods($data);
 		}
+// Create a list of extra caller id numbers to add
+// These numbers need to be validated in Twilio
+// Validated numbers are listed in your Twilio Account: https://www.twilio.com/user/account/phone-numbers/verified
+$custom_numbers = array(
+	(object) array(
+		'id' => null,
+		'flow_id' => null,
+		'name' => '800-687-8505', // friendly formatted number
+		'phone' => '(800) 687-8505', // friendly formatted number
+		'pin' => null,
+		'sandbox' => null,
+		'url' => null,
+		'method' => null,
+		'smsUrl' => null,
+		'smsMethod' => null,
+		'capabilities' => 'voice',
+		'voiceApplicationSid' => null
+	),
+	// add another object here if you have more than 1 number to add
+);
+// iterate the above list and PREPEND the numbers to the list of numbers
+// so that they show up first
+
+foreach ($custom_numbers as $number)
+{
+	array_unshift($data['callerid_numbers'], $number);
+}
 				
 		$data['browserphone'] = $this->init_browserphone_data($data['callerid_numbers']);
 		
