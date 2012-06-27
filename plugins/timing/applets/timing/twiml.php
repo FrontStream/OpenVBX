@@ -8,6 +8,10 @@ $today = date_format($now, 'w') - 1;
 $holiday = array();
 foreach(array('holiday_start', 'holiday_end') as $range){
     $holiday[$range] = AppletInstance::getValue($range);
+    if(empty($holiday[$range])){
+        continue;
+    }
+    
     try {
         $holiday[$range] = new DateTime($holiday[$range]);
     } catch (Exception $e) {
